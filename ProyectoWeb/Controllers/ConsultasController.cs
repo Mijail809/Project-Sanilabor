@@ -20,15 +20,28 @@ namespace ProyectoWeb.Controllers
             //List<Empleado> oListaAreaLaboral = CD_Empleado.Listar();
             //return Json(new { data = oListaAreaLaboral }, JsonRequestBehavior.AllowGet);
 
-            List<Consulta> oListaConsultas = CD_Consulta.Listar();
+            List<Consulta> oListaConsultas = CD_Consulta.Listar(idEmpleado);
 
             if (oListaConsultas != null)
             {
-                oListaConsultas = oListaConsultas.Where(x => x.IdEmpleado.IdEmpleado == idEmpleado).ToList();
+                oListaConsultas.Where(x => x.IdEmpleado.IdEmpleado == idEmpleado).ToList();
 
             }
 
             return Json(oListaConsultas, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Guardar(Consulta oConsulta)
+        {
+            bool respuesta = false;
+
+            if (oConsulta.IdConsulta == 0)
+            {
+                respuesta = CD_Consulta.Registrar(oConsulta);
+            }
+
+
+            return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -11,12 +11,13 @@ namespace CapaDatos
 {
     public class CD_Consulta
     {
-        public static List<Consulta> Listar()
+        public static List<Consulta> Listar(int IdEmpleado)
         {
             List<Consulta> rptListaNivel = new List<Consulta>();
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 SqlCommand cmd = new SqlCommand("sp_ListarConsultas", oConexion);
+                cmd.Parameters.AddWithValue("IdEmpleado", IdEmpleado);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 try
@@ -30,17 +31,18 @@ namespace CapaDatos
                             IdConsulta = Convert.ToInt32(dr["IdConsulta"].ToString()),
                             IdEmpleado = new Empleado()
                             {
-                                IdEmpleado = Convert.ToInt32(dr["IdEmpleado"].ToString())
+                                IdEmpleado = Convert.ToInt32(dr["IdEmpleado"].ToString()),
+                                Nombres = dr["Nombres"].ToString(),
+                                Apellidos = dr["Apellidos"].ToString()
                                 //Descripcion = dr["DescripcionPeriodo"].ToString(),
                             },
                             FechaConsulta = Convert.ToDateTime(dr["FechaConsulta"]),
-                            Profesional = dr["Profesional"].ToString(),
                             MotivoConsulta = dr["MotivoConsulta"].ToString(),
                             EnfermedadActual = dr["EnfermedadActual"].ToString(),
-                            Anamnesis = dr["Anamnesis"].ToString(),
-                            OrientacionDiagnostica = dr["OrientacionDiagnostica"].ToString(),
-                            Contigencia = dr["Contigencia"].ToString(),
-                            Activo = Convert.ToBoolean(dr["Activo"])
+                            //Anamnesis = dr["Anamnesis"].ToString(),
+                            //OrientacionDiagnostica = dr["OrientacionDiagnostica"].ToString(),
+                            //Contigencia = dr["Contigencia"].ToString(),
+                            //Activo = Convert.ToBoolean(dr["Activo"])
                         });
                     }
                     dr.Close();
@@ -64,7 +66,7 @@ namespace CapaDatos
                 try
                 {
                     SqlCommand cmd = new SqlCommand("sp_RegistrarConsultas", oConexion);
-                    cmd.Parameters.AddWithValue("IdEmpleado", oconsulta.IdEmpleado);
+                    cmd.Parameters.AddWithValue("IdEmpleado", oconsulta.IdEmpleado.IdEmpleado);
                     cmd.Parameters.AddWithValue("FechaConsulta", oconsulta.FechaConsulta);
                     cmd.Parameters.AddWithValue("Profesional", oconsulta.Profesional);
                     cmd.Parameters.AddWithValue("MotivoConsulta", oconsulta.MotivoConsulta);

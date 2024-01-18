@@ -30,19 +30,14 @@
                             <div class="col-md-10">
                                 Crear Consulta
                             </div>
-                            @*<div class="col-md-2">
-                                <button class="btn btn-primary btn-sm float-right" onclick="GuardarCambios()">
-                                    <i class="fas fa-check" aria-hidden="true"></i> Guardar Cambios
-                                </button>
-                            </div>*@
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="form-group">
-                                    <label for="cboEmpleado">Empleado</label>
-                                    <select id="cboEmpleado" class="form-control"></select>
+                                    <label for="cboEmpleados">Empleado</label>
+                                    <select id="cboEmpleados" class="form-control"></select>
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -50,32 +45,47 @@
                                     <label class="bg"></label>
                                     <button type="button" class="btn btn-success btn-block mt-1" id="btnBuscar" onclick="Buscar()">Buscar</button>
                                 </div>
-
                             </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="table-responsive">
-                                    <table id="tbdata" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre Completo</th>
-                                                <th>FechaConsulta</th>
-                                                <th>MotivoConsulta</th>
-                                                <th>EnfermedadActual</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="bg"></label>
+                                    <button class="btn btn-success btn-block mt-1" onclick="abrirPopUpForm(null)">
+                                        <i class="fa fa-plus" aria-hidden="true"></i> Agregar Nuevo
+                                    </button>
+                                </div>
+                             </div>
+                                @*<div class="row">
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-success btn-block mt-1" onclick="abrirPopUpForm(null)">
+                                            <i class="fa fa-plus" aria-hidden="true"></i> Agregar Nuevo
+                                        </button>
+                                    </div>
+                                </div>*@
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="table-responsive">
+                                        <table id="tbdata" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Apellido</th>
+                                                    <th>FechaConsulta</th>
+                                                    <th>MotivoConsulta</th>
+                                                    <th>EnfermedadActual</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
 
-                                    </table>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
+                        </div>
 
                 </div>
 
@@ -84,12 +94,79 @@
 
     </div>
 </section>
+<div class="modal fade" id="FormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear Consulta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <input id="txtid" type="hidden" value="0" />
+                <form id="formdata">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="cboEmpleado">Empleado</label>
+                                <select id="cboEmpleado" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dtpfechaconsulta">Fecha Consulta</label>
+                                <input id="dtpfechaconsulta" type="text" class="form-control" name="fechaconsulta" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtprofesional">Profesional</label>
+                                <input type="text" class="form-control" id="txtprofesional" name="profesional" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtmotivoconsulta">Motivo Consulta</label>
+                                <textarea id="txtmotivoconsulta" class="form-control" name="motivoconsulta" autocomplete="off"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtenfermedadactual">Enfermedad Actual</label>
+                                <input type="text" class="form-control" id="txtenfermedadactual" name="enfermedadactual" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="txtanamnesis">Anamnesis</label>
+                                <input type="text" class="form-control" id="txtanamnesis" name="anamnesis" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtorientaciondiag">Orientacion Diagnostica</label>
+                                <textarea id="txtorientaciondiag" class="form-control" name="orientaciondiag" autocomplete="off"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtcontigencia">Contingencia</label>
+                                <input type="text" class="form-control" id="txtcontigencia" name="contigencia" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="cboEstado">Estado</label>
+                                <select id="cboEstado" class="form-control">
+                                    <option value="1">Activo</option>
+                                    <option value="0">No Activo</option>
+                                </select>
+                            </div>
+                        </div>
+                     </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success swalDefaultSuccess" onclick="Guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 
 
-@section scripts{
-    <script src="@Url.Content("~/Scripts/Controllers/CrearConsulta.js")" type="text/javascript"></script>
-}
+    @section scripts{
+        <script src="@Url.Content("~/Scripts/Controllers/CrearConsultas.js")" type="text/javascript"></script>
+    }
 
