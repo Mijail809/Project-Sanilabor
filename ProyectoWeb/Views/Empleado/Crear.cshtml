@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "Empleados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Empleados</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Recursos Humanos</a></li>
+                    <li class="breadcrumb-item active">Empleados</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row mt-4">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-10">
+                                Lista de Areas Laborales
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success btn-sm float-right" onclick="abrirPopUpForm(null)">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Agregar Nuevo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="tbdata" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>DNI</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                   @* <th>FechaNacimiento</th>*@
+                                    <th>PuestoTrabajo</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="FormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear Empleado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="txtid" type="hidden" value="0" />
+
+                <form id="formdata">
+                    <div class="row">
+                        <div class="col-6">
+
+                            <div class="form-group">
+                                <label for="txtdni">DNI</label>
+                                <input type="text" class="form-control required" id="txtdni" name="dni" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txttelefono">Telefono</label>
+                                <input type="text" class="form-control" id="txttelefono" name="telefono" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtnombre">Nombre</label>
+                                <input type="text" class="form-control required" id="txtnombre" name="nombre" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtapellidos">Apellido</label>
+                                <input type="text" class="form-control required" id="txtapellidos" name="apellidos" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="dtpfechanacimiento">Fecha Nacimiento</label>
+                                <input id="dtpfechanacimiento" type="text" class="form-control" name="fechanacimiento" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtdireccion">Direccion</label>
+                                <input type="text" class="form-control" id="txtdireccion" name="direccion" autocomplete="off">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="txtcp">CP</label>
+                                <input type="text" class="form-control" id="txtcp" name="cp" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtprovincia">Provincia</label>
+                                <input type="text" class="form-control" id="txtprovincia" name="provincia" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtpoblacion">Población</label>
+                                <input type="text" class="form-control" id="txtpoblacion" name="poblacion" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="txtpuestotrabajo">Puesto de Trabajo</label>
+                                <input type="text" class="form-control required" id="txtpuestotrabajo" name="puestotrabajo" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtriesgo1">Riesgo 1</label>
+                                <input type="text"  class="form-control" id="txtriesgo1" name="riesgo1" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtriesgo2">Riesgo 2</label>
+                                <input type="text"  class="form-control" id="txtriesgo2" name="riesgo2" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtriesgo3">Riesgo 3</label>
+                                <input type="text"   class="form-control" id="txtriesgo3" name="riesgo3" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtobservaciones">Observaciones</label>
+                                <textarea id="txtobservaciones" class="form-control" name="observaciones" autocomplete="off"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="cboEstadoEmpleado">Estado Empleado</label>
+                                <select id="cboEstadoEmpleado" class="form-control">
+                                    <option value="1">Alta</option>
+                                    <option value="2">Baja</option>
+                                    <option value="3">Incapacidad</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dtpfechabaja">Fecha de Baja</label>
+                                <input id="dtpfechabaja" type="text" class="form-control" name="fechabaja" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="dtppropuestaalta">Propuesto de Alta</label>
+                                <input id="dtppropuestaalta" type="text"  class="form-control" name="propuestaalta" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="dtpaltaefectiva">Alta Efectiva</label>
+                                <input id="dtpaltaefectiva" type="text"  class="form-control" name="altaefectiva" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="dtppropuestaincapacidad">Propuesta Incapacidad</label>
+                                <input id="dtppropuestaincapacidad" type="text" class="form-control" name="propuestaincapacidad" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="cboEstado">Estado</label>
+                                <select id="cboEstado" class="form-control">
+                                    <option value="1">Activo</option>
+                                    <option value="0">No Activo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success swalDefaultSuccess" onclick="Guardar()" >Guardar</button>
+           
+                </div>
+            </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="@Url.Content("~/Scripts/Controllers/CrearEmpleado.js")" type="text/javascript"></script>
+}
+
