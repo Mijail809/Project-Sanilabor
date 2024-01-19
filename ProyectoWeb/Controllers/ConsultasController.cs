@@ -30,7 +30,7 @@ namespace ProyectoWeb.Controllers
 
             return Json(oListaConsultas, JsonRequestBehavior.AllowGet);
         }
-
+        [HttpPost]
         public JsonResult Guardar(Consulta oConsulta)
         {
             bool respuesta = false;
@@ -39,8 +39,19 @@ namespace ProyectoWeb.Controllers
             {
                 respuesta = CD_Consulta.Registrar(oConsulta);
             }
+            else
+            {
+                respuesta = CD_Consulta.Editar(oConsulta);
+            }
 
 
+            return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult Eliminar(int idconsulta = 0)
+        {
+            bool respuesta = CD_Consulta.Eliminar(idconsulta);
             return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
         }
     }

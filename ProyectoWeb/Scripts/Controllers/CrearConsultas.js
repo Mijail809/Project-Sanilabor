@@ -122,7 +122,20 @@ function abrirPopUpForm(json) {
 
     $("#txtid").val(0);
 
-    if (json == null) {
+    if (json != null) {
+        $("#txtid").val(json.IdConsulta);
+        $("#dtpfechaconsulta").val(ObtenerFormatoFecha(json.FechaConsulta));
+        $("#txtprofesional").val(json.Profesional);
+        $("#txtmotivoconsulta").val(json.MotivoConsulta); 
+        $("#txtenfermedadactual").val(json.EnfermedadActual);
+        $("#txtanamnesis").val(json.Anamnesis);
+        $("#txtorientaciondiag").val(json.OrientacionDiagnostica);
+        $("#txtcontigencia").val(json.Contigencia);
+        var valor = 0;
+        valor = json.Activo == true ? 1 : 0
+        $("#cboEstado").val(valor);
+    }
+    else {
         $("#dtpfechaconsulta").val("");
         $("#txtprofesional").val("");
         $("#txtmotivoconsulta").val("");
@@ -153,16 +166,49 @@ function Buscar() {
             if (data != null) {
 
                 $.each(data, function (i, row) {
+
                     $("<tr>").append(
                         $("<td>").text(row.IdEmpleado.Nombres),
                         $("<td>").text(row.IdEmpleado.Apellidos),
                         $("<td>").text(ObtenerFormatoFecha(row.FechaConsulta)),
+                        $("<td>").text(row.Profesional),
                         $("<td>").text(row.MotivoConsulta),
                         $("<td>").text(row.EnfermedadActual),
+                        $("<td>").text(row.Anamnesis),
+                        $("<td>").text(row.OrientacionDiagnostica),
+                        $("<td>").text(row.Contigencia),
+                        $("<td>").text(row.Activo ? "Activo" : "No Activo"),
+                        $("<td>").append(
+                            $("<button>")
+                                .addClass('btn btn-primary btn-sm')
+                                .attr('type', 'button')
+                                .on('click', function () {
+                                    abrirPopUpForm(row);
+                                })
+                                .html("<i class='fas fa-pen'></i>"),
+                            $("<button>")
+                                .addClass('btn btn-danger btn-sm ml-2')
+                                .attr('type', 'button')
+                                .on('click', function () {
+                                    eliminar(row.IdConsulta);
+                                })
+                                .html("<i class='fa fa-trash'></i>")
+                        ),
+                        //$("<td>").append(
+                        //    $("<button>")
+                        //        .addClass('btn btn-danger btn-sm ml-2')
+                        //        .attr('type', 'button')
+                        //        .on('click', function () {
+                        //            eliminar(row.IdConsulta);
+                        //        })
+                        //        .html("<i class='fa fa-trash'></i>")
+                        //)
+
                         //$("<td>").append(
                         //    $("<input>").attr({ "type": "number" }).val(row.TotalVacantes)
                         //)
                     ).data("data", row).appendTo("#tbdata tbody");
+
                 })
 
             } else {
@@ -234,6 +280,32 @@ function Guardar() {
 
 }
 
+function eliminar($idconsulta) {
+    if (confirm("¿Desea inactivar la consulta seleccionada?")) {
+        jQuery.ajax({
+            url: $.MisUrls.url.UrlGetEliminarConsultas + "?idconsulta=" + $idconsulta,
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                if (data.resultado) {
+                    Buscar();
+                    swal("Mensaje", "Registro Eliminado exitosamente", "success")
+                } else {
+                    swal("Mensaje", "No se pudo inactivar el empleado", "warning")
+                }
+            },
+            error: function (error) {
+                console.log(error)
+            },
+            beforeSend: function () {
+
+            },
+        });
+
+    }
+}
 function ObtenerFormatoFecha(datetime) {
 
     var re = /-?\d+/;

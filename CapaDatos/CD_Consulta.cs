@@ -37,12 +37,13 @@ namespace CapaDatos
                                 //Descripcion = dr["DescripcionPeriodo"].ToString(),
                             },
                             FechaConsulta = Convert.ToDateTime(dr["FechaConsulta"]),
+                            Profesional = dr["Profesional"].ToString(),
                             MotivoConsulta = dr["MotivoConsulta"].ToString(),
                             EnfermedadActual = dr["EnfermedadActual"].ToString(),
-                            //Anamnesis = dr["Anamnesis"].ToString(),
-                            //OrientacionDiagnostica = dr["OrientacionDiagnostica"].ToString(),
-                            //Contigencia = dr["Contigencia"].ToString(),
-                            //Activo = Convert.ToBoolean(dr["Activo"])
+                            Anamnesis = dr["Anamnesis"].ToString(),
+                            OrientacionDiagnostica = dr["OrientacionDiagnostica"].ToString(),
+                            Contigencia = dr["Contigencia"].ToString(),
+                            Activo = Convert.ToBoolean(dr["Activo"])
                         });
                     }
                     dr.Close();
@@ -71,9 +72,78 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("Profesional", oconsulta.Profesional);
                     cmd.Parameters.AddWithValue("MotivoConsulta", oconsulta.MotivoConsulta);
                     cmd.Parameters.AddWithValue("EnfermedadActual", oconsulta.EnfermedadActual);
-                    cmd.Parameters.AddWithValue("Anamnesis", oconsulta.Anamnesis);
-                    cmd.Parameters.AddWithValue("OrientacionDiagnostica", oconsulta.OrientacionDiagnostica);
+                    cmd.Parameters.AddWithValue("Anamnesis", string.IsNullOrEmpty(oconsulta.Anamnesis)? DBNull.Value : (object)oconsulta.Anamnesis);
+                    cmd.Parameters.AddWithValue("OrientacionDiagnostica", string.IsNullOrEmpty(oconsulta.OrientacionDiagnostica)? DBNull.Value :(object)oconsulta.OrientacionDiagnostica);
                     cmd.Parameters.AddWithValue("Contigencia", oconsulta.Contigencia);
+                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //string.IsNullOrEmpty(oEmpleado.Riesgos2Enfermedad) ? DBNull.Value : (object)oEmpleado.Riesgos2Enfermedad);
+
+                    oConexion.Open();
+
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                }
+
+            }
+
+            return respuesta;
+
+        }
+
+        public static bool Editar(Consulta oConsulta)
+        {
+            bool respuesta = true;
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("sp_EditarConsulta", oConexion);
+                    cmd.Parameters.AddWithValue("IdConsulta", oConsulta.IdConsulta);
+                    cmd.Parameters.AddWithValue("FechaConsulta", oConsulta.FechaConsulta);
+                    cmd.Parameters.AddWithValue("Profesional", oConsulta.Profesional);
+                    cmd.Parameters.AddWithValue("MotivoConsulta", oConsulta.MotivoConsulta);
+                    cmd.Parameters.AddWithValue("EnfermedadActual", oConsulta.EnfermedadActual);
+                    cmd.Parameters.AddWithValue("Anamnesis", oConsulta.Anamnesis);
+                    cmd.Parameters.AddWithValue("OrientacionDiagnostica", oConsulta.OrientacionDiagnostica);
+                    cmd.Parameters.AddWithValue("Contingencia", oConsulta.Contigencia);
+                    cmd.Parameters.AddWithValue("Activo", oConsulta.Activo);
+                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oConexion.Open();
+
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                }
+
+            }
+
+            return respuesta;
+
+        }
+
+        public static bool Eliminar(int idConsulta)
+        {
+            bool respuesta = true;
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("sp_EliminarConsulta", oConexion);
+                    cmd.Parameters.AddWithValue("IdConsulta", idConsulta);
                     cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
